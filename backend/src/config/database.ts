@@ -13,10 +13,12 @@ export async function connectDatabase(): Promise<void> {
   let attempt = 0
   while (attempt < MAX_RETRIES) {
     try {
+      const uriHasDbName = /\.net\/[^?/]+/.test(uri) || /localhost:\d+\/[^?/]+/.test(uri)
       await mongoose.connect(uri, {
         maxPoolSize: 10,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
+        ...(uriHasDbName ? {} : { dbName: 'onulota' }),
       })
       logger.info('MongoDB connected successfully')
       return

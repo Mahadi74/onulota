@@ -12,10 +12,14 @@ async function getApp() {
     if (mongoose.default.connection.readyState === 0) {
       const uri = process.env.MONGODB_URI
       if (!uri) throw new Error('MONGODB_URI is not set')
+      // Extract db name from URI path; fall back to 'onulota' if URI has no db name
+      // e.g. mongodb+srv://user:pass@cluster.net/?... → no db name → use 'onulota'
+      const uriHasDbName = /\.net\/[^?/]+/.test(uri) || /localhost:\d+\/[^?/]+/.test(uri)
       await mongoose.default.connect(uri, {
         maxPoolSize: 5,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 10000,
+        ...(uriHasDbName ? {} : { dbName: 'onulota' }),
       })
     }
   } catch (err) {
