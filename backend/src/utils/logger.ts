@@ -21,30 +21,36 @@ const redactSensitive = winston.format((info) => {
   return redact(info as unknown as Record<string, unknown>) as typeof info
 })()
 
-const fileTransport = new DailyRotateFile({
-  filename: path.join('logs', 'app-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD',
-  maxSize: '20m',
-  maxFiles: '14d',
-  format: combine(timestamp(), errors({ stack: true }), redactSensitive, json()),
-})
+// On Vercel (read-only filesystem), only use console transport
+const isVercel = Boolean(process.env.VERCEL)
 
-const errorFileTransport = new DailyRotateFile({
-  filename: path.join('logs', 'error-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD',
-  level: 'error',
-  maxSize: '20m',
-  maxFiles: '30d',
-  format: combine(timestamp(), errors({ stack: true }), redactSensitive, json()),
-})
+const transports: winston.transport[] = [
+  new winston.transports.Console({
+    format: combine(colorize(), timestamp({ format: 'HH:mm:ss' }), simple()),
+  }),
+]
+
+if (!isVercel) {
+  transports.push(
+    new DailyRotateFile({
+      filename: path.join('logs', 'app-%DATE%.log'),
+      datePattern: 'YYYY-MM-DD',
+      maxSize: '20m',
+      maxFiles: '14d',
+      format: combine(timestamp(), errors({ stack: true }), redactSensitive, json()),
+    }),
+    new DailyRotateFile({
+      filename: path.join('logs', 'error-%DATE%.log'),
+      datePattern: 'YYYY-MM-DD',
+      level: 'error',
+      maxSize: '20m',
+      maxFiles: '30d',
+      format: combine(timestamp(), errors({ stack: true }), redactSensitive, json()),
+    })
+  )
+}
 
 export const logger = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-  transports: [
-    new winston.transports.Console({
-      format: combine(colorize(), timestamp({ format: 'HH:mm:ss' }), simple()),
-    }),
-    fileTransport,
-    errorFileTransport,
-  ],
+  transports,
 })
