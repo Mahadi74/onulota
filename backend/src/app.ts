@@ -85,6 +85,31 @@ export function createApp(): express.Application {
     res.json({ status: 'ok', timestamp: new Date().toISOString(), uptime: process.uptime() })
   })
 
+  // Debug endpoint — only active when DEBUG_MODE env var is set
+  app.get('/api/debug', async (_req, res) => {
+    if (!process.env.DEBUG_MODE) {
+      return res.status(404).json({ error: 'Not Found' })
+    }
+    const mongoose = await import('mongoose')
+    const states = ['disconnected', 'connected', 'connecting', 'disconnecting']
+    const readyState = mongoose.default.connection.readyState
+    try {
+      const { SiteSettings } = await import('./models/SiteSettings')
+      const count = await SiteSettings.countDocuments()
+      return res.json({
+        mongo: { state: states[readyState] ?? readyState, dbName: mongoose.default.connection.db?.databaseName },
+        settingsCount: count,
+        env: { NODE_ENV: process.env.NODE_ENV, hasMongoUri: !!process.env.MONGODB_URI },
+      })
+    } catch (err) {
+      return res.status(500).json({
+        mongo: { state: states[readyState] ?? readyState },
+        error: (err as Error).message,
+        env: { NODE_ENV: process.env.NODE_ENV, hasMongoUri: !!process.env.MONGODB_URI },
+      })
+    }
+  })
+
   // Serve uploaded files (profile images, etc.)
   app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')))
 
