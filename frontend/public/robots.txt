@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Block private/auth pages from indexing
+Disallow: /cart
+Disallow: /checkout
+Disallow: /orders
+Disallow: /profile
+Disallow: /admin
+
+Sitemap: https://onulota.com/sitemap.xml

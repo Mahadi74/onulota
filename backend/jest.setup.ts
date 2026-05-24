@@ -1,0 +1,13 @@
+// Set up environment variables for tests
+process.env.NODE_ENV = 'test'
+process.env.PORT = '5000'
+process.env.JWT_SECRET = 'test_jwt_secret_min_32_characters_long'
+process.env.JWT_REFRESH_SECRET = 'test_refresh_secret_min_32_characters_long'
+process.env.BCRYPT_ROUNDS = '10'
+process.env.GOOGLE_CLIENT_ID = 'test_google_client_id'
+process.env.GOOGLE_CLIENT_SECRET = 'test_google_client_secret'
+process.env.GOOGLE_CALLBACK_URL = 'http://localhost:5000/api/auth/google/callback'
+process.env.SSLCOMMERZ_STORE_ID = 'test_store_id'
+process.env.SSLCOMMERZ_STORE_PASSWORD = 'test_store_password'
+process.env.FRONTEND_URL = 'http://localhost:3000'
+process.env.REDIS_URL = 'redis://localhost:6379'

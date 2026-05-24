@@ -1,0 +1,17 @@
+title = "Onulota eCommerce Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+description = "Bangladesh Payment Gateway Keys"
+id = "bkash-key"
+regex = '''(?i)(bkash|nagad|sslcommerz)[_-]?(app[_-]?key|secret|password|token)\s*=\s*['"]?[a-zA-Z0-9+/]{20,}'''
+tags = ["payment", "key"]
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+  '''.env.example''',
+  '''\.github/workflows''',
+]
