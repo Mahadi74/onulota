@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Home, ShoppingBag, ShoppingCart, Heart, User, LayoutDashboard, LogOut, LogIn, UserPlus } from 'lucide-react'
+import { Home, ShoppingBag, ShoppingCart, Heart, CircleUser, LayoutDashboard, LogOut, LogIn, UserPlus } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useAuthStore } from '@/store/authStore'
@@ -56,7 +56,7 @@ export const BottomNav: React.FC = () => {
         >
           {user ? (
             <>
-              {/* User info header */}
+              {/* CircleUser info header */}
               <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
                 <p className="text-xs text-slate-500">Signed in as</p>
                 <p className="text-sm font-bold text-slate-900 truncate">{user.name || user.email}</p>
@@ -68,7 +68,7 @@ export const BottomNav: React.FC = () => {
                 className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <User className="w-4 h-4 text-blue-600" />
+                  <CircleUser className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">My Profile</p>
@@ -194,7 +194,7 @@ export const BottomNav: React.FC = () => {
                   {user.name.charAt(0).toUpperCase()}
                 </div>
               ) : (
-                <User
+                <CircleUser
                   className={`w-5 h-5 transition-all duration-200 ${isAccountActive || accountOpen ? 'text-slate-900' : 'text-slate-400'}`}
                   strokeWidth={isAccountActive || accountOpen ? 2.5 : 1.75}
                 />
