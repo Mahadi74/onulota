@@ -211,23 +211,11 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Header */}
+      {/* Mobile Header — logo + search only; nav handled by BottomNav */}
       <div className="md:hidden">
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-gray-700"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-
+        <div className="flex items-center justify-between px-4 py-3 gap-3">
           {/* Logo */}
-          <Link to="/" className="flex-1 text-center flex justify-center">
+          <Link to="/" className="flex-shrink-0">
             {logoUrl ? (
               <img src={logoUrl} alt={siteName} className="h-8 object-contain" />
             ) : (
@@ -235,59 +223,22 @@ export const Header: React.FC = () => {
             )}
           </Link>
 
-          {/* Cart & User */}
-          <div className="flex items-center gap-3">
-            {/* Wishlist */}
-            <Link to="/wishlist" className="relative">
-              <Heart className={`w-5 h-5 transition-all duration-200 ${wishlistCount > 0 ? 'fill-rose-500 text-rose-500' : 'text-gray-400'}`} style={{ fill: wishlistCount > 0 ? undefined : 'none', strokeWidth: 1.75 }} />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
-            <Link to="/cart" className="relative">
-              <ShoppingCart className={`w-5 h-5 text-gray-700 ${cartBounce ? 'cart-bounce' : ''}`} />
-              {cartItemCount > 0 && (
-                <span key={cartItemCount} className={`absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm ${cartBounce ? 'cart-bounce' : ''}`}>
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
-            {user && (
-              <Link to="/profile">
-                <User className="w-5 h-5 text-gray-700" />
-              </Link>
-            )}
-          </div>
+          {/* Search bar */}
+          <form onSubmit={handleSearch} className="flex-1">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-3 pr-9 py-2 text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button type="submit" className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+                <Search className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
         </div>
-
-        {/* Mobile Search */}
-        <form onSubmit={handleSearch} className="px-4 py-2">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-          </div>
-        </form>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <MobileMenu
-            onClose={() => setIsMobileMenuOpen(false)}
-            onLogout={handleLogout}
-          />
-        )}
       </div>
     </header>
   )
