@@ -517,9 +517,11 @@ async function seed(): Promise<void> {
   }
 
   log('Connecting to MongoDB…')
+  const uriHasDbName = /\.net\/[^?/]+/.test(uri) || /localhost:\d+\/[^?/]+/.test(uri)
   await mongoose.connect(uri, {
     maxPoolSize: 5,
     serverSelectionTimeoutMS: 10000,
+    ...(uriHasDbName ? {} : { dbName: 'onulota' }),
   })
   log('Connected.')
 
