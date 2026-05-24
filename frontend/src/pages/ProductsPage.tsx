@@ -8,7 +8,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import {
   Star, ShoppingCart, SlidersHorizontal, X, ChevronDown,
-  LayoutGrid, List, Heart, Package, Zap, ArrowRight,
+  LayoutGrid, List, Heart, Package, Zap, ArrowRight, ShoppingBag,
 } from 'lucide-react'
 
 /* ─── Types ─────────────────────────────────────────────────────────── */
@@ -471,19 +471,22 @@ export default function ProductsPage() {
                 Out of Stock
               </span>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
+                {/* Order Now — icon-only on mobile 2-col grid, text+icon on sm+ */}
                 <Link
                   to={`/products/${product._id}`}
-                  className="flex-1 inline-flex items-center justify-center text-sm font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm shadow-blue-200 py-2.5"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm shadow-blue-200 py-2.5 px-2 sm:px-3 min-w-0"
                 >
-                  Order Now
+                  <ShoppingBag className="w-4 h-4 shrink-0" />
+                  <span className="hidden sm:inline truncate">Order Now</span>
                 </Link>
+                {/* Add to Cart */}
                 <button
                   onClick={e => {
                     e.preventDefault()
                     addItem({ _id: `${product._id}-${Date.now()}`, product: { _id: product._id, name: product.name, price: product.price, image: img }, quantity: 1, price: product.price })
                   }}
-                  className="flex-none inline-flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 text-blue-600 hover:bg-blue-100 active:scale-[0.98] transition-all"
+                  className="flex-none inline-flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 w-10 py-2.5 text-blue-600 hover:bg-blue-100 active:scale-[0.98] transition-all"
                   title="Add to Cart"
                 >
                   <ShoppingCart className="w-4 h-4" />
