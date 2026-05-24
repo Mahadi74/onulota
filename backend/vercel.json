@@ -15,6 +15,12 @@
       "dest": "api/index.ts"
     }
   ],
-  "installCommand": "npm install --platform=linux --arch=x64 sharp && npm install"
+  "installCommand": "npm install --platform=linux --arch=x64 sharp && npm install",
+  "crons": [
+    {
+      "path": "/api/health",
+      "schedule": "0 * * * *"
+    }
+  ]
 }
 
