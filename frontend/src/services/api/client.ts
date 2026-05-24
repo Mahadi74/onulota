@@ -25,11 +25,20 @@ apiClient.interceptors.request.use(
   }
 )
 
-// Response interceptor: Handle 401 and refresh token
+// Response interceptor: Handle 401/refresh token and 500/503 cold-start retries
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean; _coldRetry?: boolean }
+
+    // Retry once on 500/503 — handles Vercel cold-start where MongoDB is still connecting.
+    // Wait 1.5s before retrying to give the function time to finish initialising.
+    const status = error.response?.status
+    if ((status === 500 || status === 503) && !originalRequest._coldRetry) {
+      originalRequest._coldRetry = true
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      return apiClient(originalRequest)
+    }
 
     // If 401 and not already retried, attempt token refresh
     // Skip refresh logic for the login endpoint itself — a 401 there means wrong credentials
