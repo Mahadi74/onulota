@@ -32,7 +32,9 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
     // If 401 and not already retried, attempt token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip refresh logic for the login endpoint itself — a 401 there means wrong credentials
+    const isAuthEndpoint = originalRequest.url?.includes('/api/auth/login') || originalRequest.url?.includes('/api/auth/register')
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true
 
       try {
