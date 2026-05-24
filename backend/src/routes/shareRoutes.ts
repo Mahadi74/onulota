@@ -23,7 +23,17 @@ const SITE_NAME = process.env.SITE_NAME || 'Onulota'
 
 function getSiteUrl(req: Request): string {
   // Use explicit env var first (production)
-  if (process.env.FRONTEND_URL) return process.env.FRONTEND_URL.split(',')[0]
+  if (process.env.FRONTEND_URL) {
+    const base = process.env.FRONTEND_URL.split(',')[0].trim()
+    // Always use the www variant as canonical to avoid non-www ↔ www redirect loops
+    try {
+      const url = new URL(base)
+      if (!url.hostname.startsWith('www.') && !url.hostname.includes('localhost')) {
+        return `${url.protocol}//www.${url.hostname}`
+      }
+    } catch { /* ignore */ }
+    return base
+  }
   // Derive from request host so ngrok / staging URLs work automatically
   const proto = req.headers['x-forwarded-proto'] || req.protocol || 'http'
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000'
