@@ -43,11 +43,25 @@ export function createApp(): express.Application {
     crossOriginEmbedderPolicy: false,
   }))
 
-  // CORS
-  const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000').split(',')
+  // CORS — build allowed list from FRONTEND_URL env var and always include www variant
+  const rawOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000').split(',').map((o) => o.trim())
+  const allowedOrigins = new Set<string>(rawOrigins)
+  // Auto-add www ↔ non-www variants so both always work
+  rawOrigins.forEach((origin) => {
+    try {
+      const url = new URL(origin)
+      if (url.hostname.startsWith('www.')) {
+        allowedOrigins.add(`${url.protocol}//${url.hostname.replace(/^www\./, '')}`)
+      } else {
+        allowedOrigins.add(`${url.protocol}//www.${url.hostname}`)
+      }
+    } catch {
+      // ignore malformed
+    }
+  })
   app.use(cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.has(origin)) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))
