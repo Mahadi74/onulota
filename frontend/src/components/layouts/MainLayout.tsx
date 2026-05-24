@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { BottomNav } from '@/components/BottomNav'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -20,6 +21,9 @@ export const MainLayout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      {/* Spacer so footer isn't hidden under the bottom nav on mobile */}
+      <div className="md:hidden h-24" />
+      <BottomNav />
     </div>
   )
 }
