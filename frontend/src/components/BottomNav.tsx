@@ -138,7 +138,7 @@ export const BottomNav: React.FC = () => {
       )}
 
       {/* Tab bar */}
-      <div className="mx-3 mb-3 rounded-[26px] bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)] border border-white/60">
+      <div className="mx-2 mb-1 rounded-[26px] bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)] border border-white/60">
         <div className="flex items-end justify-around px-2 pt-3 pb-2">
 
           {/* Main tabs */}
