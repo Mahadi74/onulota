@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem nodemon src/index.ts",
     "build": "tsc",
-    "vercel-build": "npm install --platform=linux --arch=x64 sharp && tsc",
+    "vercel-build": "npm_config_platform=linux npm_config_arch=x64 npm install sharp && tsc",
     "start": "NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem node dist/index.js",
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
