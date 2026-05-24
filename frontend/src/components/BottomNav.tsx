@@ -1,11 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, Search, ShoppingCart, Heart, User } from 'lucide-react'
+import { Home, Package, ShoppingCart, Heart, User } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 
 const TABS = [
   { to: '/',         icon: Home,         label: 'Home'      },
-  { to: '/products', icon: Search,        label: 'Search'    },
+  { to: '/orders',   icon: Package,       label: 'Orders'    },
   { to: '/cart',     icon: ShoppingCart,  label: 'Cart',  center: true },
   { to: '/wishlist', icon: Heart,         label: 'Wishlist'  },
   { to: '/profile',  icon: User,          label: 'Account'   },
