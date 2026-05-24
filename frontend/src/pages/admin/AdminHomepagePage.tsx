@@ -185,7 +185,7 @@ export default function AdminHomepagePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Homepage Sections</h1>
         <button
           onClick={() => setIsFormOpen(true)}
@@ -206,71 +206,121 @@ export default function AdminHomepagePage() {
                 {type.replace('_', ' ')}
               </h2>
               <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
-                    <tr>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">Title</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
-                      <th className="text-center py-3 px-4 font-medium text-gray-700">Order</th>
-                      <th className="text-center py-3 px-4 font-medium text-gray-700">Status</th>
-                      <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sections.map((section) => (
-                      <tr key={section._id} className="border-b hover:bg-gray-50">
-                        <td className="py-3 px-4">
-                          <div className="font-medium text-gray-900">{section.title}</div>
-                          {section.subtitle && (
-                            <div className="text-sm text-gray-500">{section.subtitle}</div>
-                          )}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${SECTION_BADGE_COLORS[section.section]}`}
-                          >
-                            {section.section.replace('_', ' ')}
-                          </span>
-                        </td>
-                        <td className="text-center py-3 px-4 text-gray-600">{section.order}</td>
-                        <td className="text-center py-3 px-4">
-                          <button
-                            onClick={() =>
-                              toggleActive({ id: section._id, isActive: !section.isActive })
-                            }
-                            className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                              section.isActive
-                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                                : 'bg-red-100 text-red-800 hover:bg-red-200'
-                            }`}
-                          >
-                            {section.isActive ? 'Active' : 'Inactive'}
-                          </button>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <div className="flex justify-center gap-2">
-                            <button
-                              onClick={() => handleEdit(section)}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => {
-                                if (confirm('Delete this section permanently?')) {
-                                  deleteSection(section._id)
-                                }
-                              }}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
+                {/* Desktop table */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 border-b">
+                      <tr>
+                        <th className="text-left py-3 px-4 font-medium text-gray-700">Title</th>
+                        <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+                        <th className="text-center py-3 px-4 font-medium text-gray-700">Order</th>
+                        <th className="text-center py-3 px-4 font-medium text-gray-700">Status</th>
+                        <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {sections.map((section) => (
+                        <tr key={section._id} className="border-b hover:bg-gray-50">
+                          <td className="py-3 px-4">
+                            <div className="font-medium text-gray-900">{section.title}</div>
+                            {section.subtitle && (
+                              <div className="text-sm text-gray-500">{section.subtitle}</div>
+                            )}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${SECTION_BADGE_COLORS[section.section]}`}
+                            >
+                              {section.section.replace('_', ' ')}
+                            </span>
+                          </td>
+                          <td className="text-center py-3 px-4 text-gray-600">{section.order}</td>
+                          <td className="text-center py-3 px-4">
+                            <button
+                              onClick={() =>
+                                toggleActive({ id: section._id, isActive: !section.isActive })
+                              }
+                              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                                section.isActive
+                                  ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                  : 'bg-red-100 text-red-800 hover:bg-red-200'
+                              }`}
+                            >
+                              {section.isActive ? 'Active' : 'Inactive'}
+                            </button>
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <button
+                                onClick={() => handleEdit(section)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm('Delete this section permanently?')) {
+                                    deleteSection(section._id)
+                                  }
+                                }}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Mobile cards */}
+                <div className="sm:hidden space-y-2 p-4">
+                  {sections.map((section) => (
+                    <div key={section._id} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3">
+                      {section.image && (
+                        <img src={section.image} className="h-12 w-12 rounded-lg object-cover flex-shrink-0" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-slate-800 truncate">{section.title}</p>
+                        <p className="text-xs text-slate-500">Order: {section.order}</p>
+                        <span className={`mt-1 inline-block px-2 py-0.5 rounded-full text-xs font-medium ${SECTION_BADGE_COLORS[section.section]}`}>
+                          {section.section.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-end gap-1.5">
+                        <button
+                          onClick={() => toggleActive({ id: section._id, isActive: !section.isActive })}
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium transition ${
+                            section.isActive
+                              ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                              : 'bg-red-100 text-red-800 hover:bg-red-200'
+                          }`}
+                        >
+                          {section.isActive ? 'Active' : 'Inactive'}
+                        </button>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => handleEdit(section)}
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (confirm('Delete this section permanently?')) {
+                                deleteSection(section._id)
+                              }
+                            }}
+                            className="p-1.5 text-red-600 hover:bg-red-50 rounded"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )

@@ -75,7 +75,7 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Site Settings</h1>
           <p className="text-sm text-slate-500 mt-1">Manage logo, contact info, and payment methods</p>
@@ -83,7 +83,7 @@ export default function AdminSettingsPage() {
         <button
           onClick={() => save(form)}
           disabled={isPending}
-          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition shadow-sm"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition shadow-sm"
         >
           <Save className="w-4 h-4" />
           {isPending ? 'Saving…' : saved ? 'Saved!' : 'Save Changes'}
@@ -214,31 +214,33 @@ export default function AdminSettingsPage() {
         <h2 className="text-base font-semibold text-slate-800">Payment Methods</h2>
         <div className="space-y-3">
           {form.paymentMethods.map((pm, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3">
+            <div key={i} className="rounded-xl border border-slate-100 bg-slate-50 p-3 space-y-2 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
               <input
                 value={pm.name}
                 onChange={(e) => setPM(i, { name: e.target.value })}
                 placeholder="Name"
-                className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 value={pm.logo || ''}
                 onChange={(e) => setPM(i, { logo: e.target.value })}
                 placeholder="Logo URL (optional)"
-                className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <label className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={pm.isActive}
-                  onChange={(e) => setPM(i, { isActive: e.target.checked })}
-                  className="rounded"
-                />
-                Active
-              </label>
-              <button onClick={() => removePM(i)} className="p-1.5 text-slate-400 hover:text-red-500 transition">
-                <Trash2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center justify-between sm:contents">
+                <label className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={pm.isActive}
+                    onChange={(e) => setPM(i, { isActive: e.target.checked })}
+                    className="rounded"
+                  />
+                  Active
+                </label>
+                <button onClick={() => removePM(i)} className="p-1.5 text-slate-400 hover:text-red-500 transition">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
