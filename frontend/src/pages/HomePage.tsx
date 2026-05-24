@@ -225,8 +225,8 @@ export default function HomePage() {
   })()
   const brands: HomepageSectionItem[] | null = homepageData?.brands?.length ? homepageData.brands : null
   const features = homepageData?.features?.length
-    ? homepageData.features.map((f, i) => ({ icon: fallbackFeatures[i % fallbackFeatures.length].icon, title: f.title, description: f.description || f.subtitle || '' }))
-    : fallbackFeatures
+    ? homepageData.features.map((f, i) => ({ icon: fallbackFeatures[i % fallbackFeatures.length].icon, image: f.image || null, title: f.title, description: f.description || f.subtitle || '' }))
+    : fallbackFeatures.map((f) => ({ ...f, image: null }))
   const ctaData = homepageData?.ctas?.[0] || null
 
   const heroBanner = homepageData?.heroBanners?.[0] || null
@@ -724,9 +724,15 @@ export default function HomePage() {
               const iconColors = ['text-blue-600 bg-blue-100', 'text-emerald-600 bg-emerald-100', 'text-rose-600 bg-rose-100']
               return (
                 <div key={i} className={`rounded-2xl border bg-gradient-to-br ${gradients[i % gradients.length]} p-8`}>
-                  <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${iconColors[i % iconColors.length]} mb-5`}>
-                    <Icon className="w-7 h-7" />
-                  </div>
+                  {f.image ? (
+                    <div className="h-14 w-14 mb-5 rounded-2xl overflow-hidden">
+                      <img src={f.image} alt={f.title} className="h-full w-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${iconColors[i % iconColors.length]} mb-5`}>
+                      <Icon className="w-7 h-7" />
+                    </div>
+                  )}
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
                   <p className="text-sm text-slate-600 leading-relaxed">{f.description}</p>
                 </div>
