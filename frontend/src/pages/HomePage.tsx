@@ -743,7 +743,16 @@ export default function HomePage() {
       </section>
 
       {/* ══ CTA BANNER ══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 py-20">
+      <section
+        className="relative overflow-hidden py-20"
+        style={
+          ctaData?.image
+            ? { backgroundImage: `url(${ctaData.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : undefined
+        }
+      >
+        {/* Gradient overlay — always shown; on top of bg image if present */}
+        <div className={`absolute inset-0 ${ctaData?.image ? 'bg-gradient-to-br from-blue-900/75 via-blue-800/70 to-indigo-900/75' : 'bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800'}`} />
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%), radial-gradient(circle at 80% 50%, #93c5fd 0%, transparent 50%)' }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-blue-200 mb-4">
