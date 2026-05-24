@@ -121,11 +121,11 @@ export default function ProductDetailPage() {
   const sizes: string[] = product.sizes || []
 
   // In production nginx routes /share → backend on same origin.
-  // In dev (port 3000) call backend directly on :5000.
-  const isDev = window.location.port === '3000'
-  const backendShareUrl = isDev
-    ? `${window.location.protocol}//${window.location.hostname}:5000/share/products/${product._id}`
-    : `${window.location.origin}/share/products/${product._id}`
+  // Share the canonical product URL — the Vercel OG function serves rich
+  // meta tags to crawlers at /products/:id, so Facebook/WhatsApp pick up
+  // the image correctly. The old /share path was a backend-only route that
+  // the frontend Vercel project doesn't know about.
+  const backendShareUrl = `${window.location.origin}/products/${product._id}`
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(backendShareUrl)
