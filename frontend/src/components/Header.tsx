@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, ShoppingCart, User, Menu, X, LayoutDashboard, Heart, Package, LogOut, ChevronDown } from 'lucide-react'
+import { Search, ShoppingCart, User, LayoutDashboard, Heart, Package, LogOut, ChevronDown } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
-import { MobileMenu } from '@/components/MobileMenu'
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '@/services/api/client'
 
@@ -16,7 +15,6 @@ export const Header: React.FC = () => {
   })
   const siteName = settings?.siteName || 'onulota'
   const logoUrl = settings?.logoUrl
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [cartBounce, setCartBounce] = useState(false)
   const navigate = useNavigate()
