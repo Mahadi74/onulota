@@ -11,6 +11,12 @@ import { logger } from '../utils/logger'
  *  - 2.2 Creates or retrieves the User account associated with the Google email
  *  - 2.4 Stores the Google user ID for future authentication attempts
  */
+// Only register Google strategy if credentials are configured
+if (
+  process.env.GOOGLE_CLIENT_ID &&
+  process.env.GOOGLE_CLIENT_SECRET &&
+  process.env.GOOGLE_CLIENT_ID !== 'your_google_client_id'
+) {
 passport.use(
   new GoogleStrategy(
     {
@@ -67,6 +73,7 @@ passport.use(
     }
   )
 )
+} // end Google OAuth guard
 
 // Passport does not use sessions in this API (JWT-based auth), so
 // serializeUser / deserializeUser are intentionally minimal.
