@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
       <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
 
       {/* Metric Cards */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -116,7 +116,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Charts */}
-      <div className="grid lg:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Sales Trend */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">30-Day Sales Trend</h2>
@@ -161,7 +161,9 @@ export default function AdminDashboardPage() {
       {/* Top Products */}
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Top 10 Best-Selling Products</h2>
-        <div className="overflow-x-auto">
+
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b">
@@ -182,6 +184,19 @@ export default function AdminDashboardPage() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="sm:hidden space-y-2">
+          {dashboardData.topProducts.map((product) => (
+            <div key={product._id} className="flex items-center justify-between py-2 border-b last:border-0">
+              <p className="text-sm text-gray-900 flex-1 min-w-0 pr-2 truncate">{product.name || '(deleted product)'}</p>
+              <div className="text-right shrink-0">
+                <p className="text-sm font-medium text-gray-900">{formatBDT(product.revenue ?? product.totalRevenue)}</p>
+                <p className="text-xs text-gray-500">{product.sales ?? product.totalQuantity} sold</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -275,14 +275,14 @@ export default function AdminProductsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Products</h1>
           <p className="text-sm text-slate-500 mt-0.5">{total} total products</p>
         </div>
         <button
           onClick={openAddForm}
-          className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition"
+          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Product
@@ -379,110 +379,182 @@ export default function AdminProductsPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50">
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Product</th>
-                  <th className="text-left py-3 px-4 font-semibold text-slate-600">Category</th>
-                  <th className="text-right py-3 px-4 font-semibold text-slate-600">Price</th>
-                  <th className="text-right py-3 px-4 font-semibold text-slate-600">Stock</th>
-                  <th className="text-center py-3 px-4 font-semibold text-slate-600">Status</th>
-                  <th className="text-center py-3 px-4 font-semibold text-slate-600">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {products.map((product) => (
-                  <tr key={product._id} className="hover:bg-slate-50 transition">
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        {product.images?.[0]?.url ? (
-                          <img
-                            src={product.images[0].thumbnail || product.images[0].url}
-                            alt={product.name}
-                            className="w-10 h-10 rounded-lg object-cover border border-slate-200 flex-shrink-0"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
-                            <Package className="w-5 h-5 text-slate-400" />
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="font-medium text-slate-900 truncate max-w-[200px]">{product.name}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {product.isFeatured && (
-                              <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-medium">
-                                <Star className="w-3 h-3" /> Featured
-                              </span>
-                            )}
-                            {product.averageRating ? (
-                              <span className="text-xs text-slate-400">★ {product.averageRating.toFixed(1)}</span>
-                            ) : null}
+          <>
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 bg-slate-50">
+                    <th className="text-left py-3 px-4 font-semibold text-slate-600">Product</th>
+                    <th className="text-left py-3 px-4 font-semibold text-slate-600">Category</th>
+                    <th className="text-right py-3 px-4 font-semibold text-slate-600">Price</th>
+                    <th className="text-right py-3 px-4 font-semibold text-slate-600">Stock</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Status</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {products.map((product) => (
+                    <tr key={product._id} className="hover:bg-slate-50 transition">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
+                          {product.images?.[0]?.url ? (
+                            <img
+                              src={product.images[0].thumbnail || product.images[0].url}
+                              alt={product.name}
+                              className="w-10 h-10 rounded-lg object-cover border border-slate-200 flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                              <Package className="w-5 h-5 text-slate-400" />
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <p className="font-medium text-slate-900 truncate max-w-[200px]">{product.name}</p>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              {product.isFeatured && (
+                                <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-medium">
+                                  <Star className="w-3 h-3" /> Featured
+                                </span>
+                              )}
+                              {product.averageRating ? (
+                                <span className="text-xs text-slate-400">★ {product.averageRating.toFixed(1)}</span>
+                              ) : null}
+                            </div>
                           </div>
                         </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                          <Tag className="w-3 h-3" />
+                          {product.category || '—'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <p className="font-semibold text-slate-900">{formatBDT(product.price)}</p>
+                        {product.compareAtPrice && product.compareAtPrice > product.price && (
+                          <p className="text-xs text-slate-400 line-through">{formatBDT(product.compareAtPrice)}</p>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <span
+                          className={`font-medium ${
+                            product.stock === 0
+                              ? 'text-red-600'
+                              : product.stock < 10
+                              ? 'text-amber-600'
+                              : 'text-slate-700'
+                          }`}
+                        >
+                          {product.stock}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <span
+                          className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${
+                            product.isActive
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-slate-100 text-slate-500'
+                          }`}
+                        >
+                          {product.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex justify-center gap-1">
+                          <button
+                            onClick={() => openEditForm(product)}
+                            className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
+                            title="Edit"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (confirm(`Delete "${product.name}"?`)) deleteProduct(product._id)
+                            }}
+                            className="p-2 rounded-lg text-red-500 hover:bg-red-50 transition"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="sm:hidden divide-y divide-slate-100">
+              {products.map((product) => (
+                <div key={product._id} className="p-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    {product.images?.[0]?.url ? (
+                      <img
+                        src={product.images[0].thumbnail || product.images[0].url}
+                        alt={product.name}
+                        className="w-12 h-12 rounded-lg object-cover border border-slate-200 flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                        <Package className="w-6 h-6 text-slate-400" />
                       </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
-                        <Tag className="w-3 h-3" />
-                        {product.category || '—'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-slate-900 truncate">{product.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                          <Tag className="w-3 h-3" />{product.category || '—'}
+                        </span>
+                        {product.isFeatured && (
+                          <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-medium">
+                            <Star className="w-3 h-3" /> Featured
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-sm">
+                    <div>
+                      <p className="text-xs text-slate-500">Price</p>
                       <p className="font-semibold text-slate-900">{formatBDT(product.price)}</p>
                       {product.compareAtPrice && product.compareAtPrice > product.price && (
                         <p className="text-xs text-slate-400 line-through">{formatBDT(product.compareAtPrice)}</p>
                       )}
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <span
-                        className={`font-medium ${
-                          product.stock === 0
-                            ? 'text-red-600'
-                            : product.stock < 10
-                            ? 'text-amber-600'
-                            : 'text-slate-700'
-                        }`}
-                      >
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Stock</p>
+                      <p className={`font-medium ${product.stock === 0 ? 'text-red-600' : product.stock < 10 ? 'text-amber-600' : 'text-slate-700'}`}>
                         {product.stock}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <span
-                        className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          product.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-slate-100 text-slate-500'
-                        }`}
-                      >
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Status</p>
+                      <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${product.isActive ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
                         {product.isActive ? 'Active' : 'Inactive'}
                       </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex justify-center gap-1">
-                        <button
-                          onClick={() => openEditForm(product)}
-                          className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
-                          title="Edit"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (confirm(`Delete "${product.name}"?`)) deleteProduct(product._id)
-                          }}
-                          className="p-2 rounded-lg text-red-500 hover:bg-red-50 transition"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => openEditForm(product)}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-blue-600 border border-blue-200 hover:bg-blue-50 transition text-sm font-medium"
+                    >
+                      <Edit2 className="w-4 h-4" /> Edit
+                    </button>
+                    <button
+                      onClick={() => { if (confirm(`Delete "${product.name}"?`)) deleteProduct(product._id) }}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-red-500 border border-red-200 hover:bg-red-50 transition text-sm font-medium"
+                    >
+                      <Trash2 className="w-4 h-4" /> Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
@@ -556,7 +628,7 @@ export default function AdminProductsPage() {
               </div>
 
               {/* Row 2: Price + Discount + Stock */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">
                     Price (৳) <span className="text-red-500">*</span>
@@ -752,7 +824,7 @@ export default function AdminProductsPage() {
               </div>
 
               {/* Row 8: Colors + Sizes */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1.5">
                     Colors

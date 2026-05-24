@@ -105,19 +105,19 @@ export default function AdminOrderDetailPage() {
   const nextStatuses = validNextStatuses[order.status] ?? []
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-6">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
           <button
             onClick={() => navigate('/admin/orders')}
-            className="flex items-center gap-1 text-blue-600 hover:underline text-sm"
+            className="flex items-center gap-1 text-blue-600 hover:underline text-sm mt-1 shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Orders
+            Back
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{order.orderNumber}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{order.orderNumber}</h1>
             <p className="text-sm text-gray-500">
               Placed {new Date(order.createdAt).toLocaleString()}
             </p>
@@ -143,7 +143,7 @@ export default function AdminOrderDetailPage() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Items + Status History */}
         <div className="lg:col-span-2 space-y-6">
           {/* Order Items */}
@@ -151,26 +151,42 @@ export default function AdminOrderDetailPage() {
             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
               <Package className="w-5 h-5" /> Order Items
             </h2>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b text-sm text-gray-500">
-                  <th className="text-left pb-2">Product</th>
-                  <th className="text-right pb-2">Price</th>
-                  <th className="text-right pb-2">Qty</th>
-                  <th className="text-right pb-2">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.items.map((item, i) => (
-                  <tr key={i} className="border-b last:border-0">
-                    <td className="py-3 text-gray-900 font-medium">{item.name}</td>
-                    <td className="py-3 text-right text-gray-600">{formatBDT(item.price)}</td>
-                    <td className="py-3 text-right text-gray-600">{item.quantity}</td>
-                    <td className="py-3 text-right font-semibold text-gray-900">{formatBDT(item.subtotal)}</td>
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b text-sm text-gray-500">
+                    <th className="text-left pb-2">Product</th>
+                    <th className="text-right pb-2">Price</th>
+                    <th className="text-right pb-2">Qty</th>
+                    <th className="text-right pb-2">Subtotal</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {order.items.map((item, i) => (
+                    <tr key={i} className="border-b last:border-0">
+                      <td className="py-3 text-gray-900 font-medium">{item.name}</td>
+                      <td className="py-3 text-right text-gray-600">{formatBDT(item.price)}</td>
+                      <td className="py-3 text-right text-gray-600">{item.quantity}</td>
+                      <td className="py-3 text-right font-semibold text-gray-900">{formatBDT(item.subtotal)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="sm:hidden space-y-3">
+              {order.items.map((item, i) => (
+                <div key={i} className="flex items-center justify-between border-b last:border-0 pb-3 last:pb-0">
+                  <div className="flex-1 min-w-0 pr-3">
+                    <p className="font-medium text-gray-900 text-sm">{item.name}</p>
+                    <p className="text-xs text-gray-500">{formatBDT(item.price)} × {item.quantity}</p>
+                  </div>
+                  <p className="font-semibold text-gray-900 text-sm shrink-0">{formatBDT(item.subtotal)}</p>
+                </div>
+              ))}
+            </div>
 
             {/* Totals */}
             <div className="mt-4 pt-4 border-t space-y-2 text-sm">

@@ -220,7 +220,7 @@ export default function AdminCategoriesPage() {
         </div>
         <button
           onClick={() => { reset(); setIsFormOpen(true) }}
-          className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition"
+          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Category

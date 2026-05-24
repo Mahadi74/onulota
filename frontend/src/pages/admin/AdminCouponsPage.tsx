@@ -127,12 +127,13 @@ export default function AdminCouponsPage() {
   const totalPages = Math.ceil((couponsData?.total || 0) / itemsPerPage)
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Coupons</h1>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Coupon
@@ -141,75 +142,105 @@ export default function AdminCouponsPage() {
 
       {/* Coupons Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Code</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Discount</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-700">Min Order</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-700">Usage</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-700">Expiry</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-700">Status</th>
-              <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {coupons.map((coupon: Coupon) => (
-              <tr key={coupon._id} className="border-b hover:bg-gray-50">
-                <td className="py-3 px-4 text-gray-900 font-medium">{coupon.code}</td>
-                <td className="py-3 px-4 text-gray-600">
-                  {coupon.discountType === 'percentage'
-                    ? `${coupon.discountValue}%`
-                    : formatBDT(coupon.discountValue)}
-                </td>
-                <td className="text-right py-3 px-4 text-gray-600">
-                  {formatBDT(coupon.minOrderValue)}
-                </td>
-                <td className="text-center py-3 px-4 text-gray-600">
-                  {coupon.usageCount} / {coupon.totalUsageLimit}
-                </td>
-                <td className="py-3 px-4 text-gray-600">
-                  {new Date(coupon.expiresAt).toLocaleDateString()}
-                </td>
-                <td className="text-center py-3 px-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      coupon.isActive
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {coupon.isActive ? 'Active' : 'Inactive'}
-                  </span>
-                </td>
-                <td className="py-3 px-4 text-center">
-                  <div className="flex justify-center gap-2">
-                    <button
-                      onClick={() => handleEdit(coupon)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (confirm('Are you sure you want to delete this coupon?')) {
-                          deleteCoupon(coupon._id)
-                        }
-                      }}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Code</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Discount</th>
+                <th className="text-right py-3 px-4 font-medium text-gray-700">Min Order</th>
+                <th className="text-center py-3 px-4 font-medium text-gray-700">Usage</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-700">Expiry</th>
+                <th className="text-center py-3 px-4 font-medium text-gray-700">Status</th>
+                <th className="text-center py-3 px-4 font-medium text-gray-700">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {coupons.map((coupon: Coupon) => (
+                <tr key={coupon._id} className="border-b hover:bg-gray-50">
+                  <td className="py-3 px-4 text-gray-900 font-medium">{coupon.code}</td>
+                  <td className="py-3 px-4 text-gray-600">
+                    {coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : formatBDT(coupon.discountValue)}
+                  </td>
+                  <td className="text-right py-3 px-4 text-gray-600">{formatBDT(coupon.minOrderValue)}</td>
+                  <td className="text-center py-3 px-4 text-gray-600">{coupon.usageCount} / {coupon.totalUsageLimit}</td>
+                  <td className="py-3 px-4 text-gray-600">{new Date(coupon.expiresAt).toLocaleDateString()}</td>
+                  <td className="text-center py-3 px-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${coupon.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {coupon.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    <div className="flex justify-center gap-2">
+                      <button onClick={() => handleEdit(coupon)} className="p-2 text-blue-600 hover:bg-blue-50 rounded">
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => { if (confirm('Are you sure you want to delete this coupon?')) deleteCoupon(coupon._id) }}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="sm:hidden divide-y divide-gray-100">
+          {coupons.map((coupon: Coupon) => (
+            <div key={coupon._id} className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <p className="font-bold text-gray-900 text-lg tracking-wide">{coupon.code}</p>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${coupon.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {coupon.isActive ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                  <p className="text-xs text-gray-500">Discount</p>
+                  <p className="font-medium text-gray-900">
+                    {coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : formatBDT(coupon.discountValue)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Min Order</p>
+                  <p className="font-medium text-gray-900">{formatBDT(coupon.minOrderValue)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Usage</p>
+                  <p className="font-medium text-gray-900">{coupon.usageCount} / {coupon.totalUsageLimit}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Expires</p>
+                  <p className="font-medium text-gray-900">{new Date(coupon.expiresAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(coupon)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-blue-200 text-blue-600 hover:bg-blue-50 text-sm font-medium"
+                >
+                  <Edit2 className="w-4 h-4" /> Edit
+                </button>
+                <button
+                  onClick={() => { if (confirm('Are you sure you want to delete this coupon?')) deleteCoupon(coupon._id) }}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium"
+                >
+                  <Trash2 className="w-4 h-4" /> Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Pagination */}
-      <div className="mt-6 flex justify-center gap-2">
+      <div className="flex justify-center gap-2">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
@@ -239,7 +270,7 @@ export default function AdminCouponsPage() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Coupon Code
