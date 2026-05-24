@@ -305,7 +305,7 @@ export default function HomePage() {
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-slate-900/70" />
+              <div className="absolute inset-0 bg-slate-900/55" />
             </>
           : <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 25% 50%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 75% 50%, #06b6d4 0%, transparent 50%)' }} />
         }
@@ -398,7 +398,7 @@ export default function HomePage() {
                   key={item._id}
                   className={`absolute inset-0 transition-opacity duration-700 ${index === activeSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
-                  <img src={item.image} alt={item.title} className="h-full w-full object-cover" loading="lazy" />
+                  <img src={item.image} alt={item.title} className="h-full w-full object-contain" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
                     <p className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2">Limited Time</p>

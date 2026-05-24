@@ -81,7 +81,7 @@ export const Header: React.FC = () => {
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
               {logoUrl ? (
-                <img src={logoUrl} alt={siteName} className="h-9 object-contain" />
+                <img src={logoUrl} alt={siteName} className="h-14 object-contain" />
               ) : (
                 <div className="text-2xl font-bold text-blue-600">{siteName}</div>
               )}
