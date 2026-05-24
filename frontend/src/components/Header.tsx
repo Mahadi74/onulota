@@ -213,7 +213,7 @@ export const Header: React.FC = () => {
       <div className="md:hidden">
         <div className="flex items-center justify-between px-4 py-3 gap-3">
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" className="flex-shrink-0 w-[120px]">
             {logoUrl ? (
               <img src={logoUrl} alt={siteName} className="h-8 object-contain" />
             ) : (
