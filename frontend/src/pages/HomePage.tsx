@@ -387,7 +387,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ CAROUSEL + ADS ══════════════════════════════════════════════ */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] items-start">
 
           {/* Carousel */}
@@ -460,7 +460,7 @@ export default function HomePage() {
       </section>
 
       {/* ══ DEALS ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 bg-white">
+      <section className="py-6 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader eyebrow="Hot Deals" title="Limited Time Offers" action="View All" onAction={() => navigate('/products')} />
 
@@ -492,7 +492,7 @@ export default function HomePage() {
       </section>
     
       {/* ══ FEATURED PRODUCTS ═══════════════════════════════════════════ */}
-      <section className="py-14 bg-slate-50">
+      <section className="py-4 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader eyebrow="Featured" title="Top Picks for You" action="See All Products" onAction={() => navigate('/products')} />
 
@@ -677,7 +677,7 @@ export default function HomePage() {
 
       {/* ══ POPULAR BRANDS ══════════════════════════════════════════════ */}
       {brands && brands.length > 0 && (
-        <section className="py-12 bg-white border-y border-slate-100">
+        <section className="py-6 bg-white border-y border-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionHeader eyebrow="Brands" title="Popular Brands" />
 
@@ -709,7 +709,7 @@ export default function HomePage() {
       )}
 
       {/* ══ WHY CHOOSE US ════════════════════════════════════════════════ */}
-      <section className="py-14 bg-slate-50">
+      <section className="py-4 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader eyebrow="Why Onulota" title="The Better Way to Shop" />
 
