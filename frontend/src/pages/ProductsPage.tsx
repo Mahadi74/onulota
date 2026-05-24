@@ -477,7 +477,7 @@ export default function ProductsPage() {
                   to={`/products/${product._id}`}
                   className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm shadow-blue-200 py-2.5 px-2 sm:px-3 min-w-0"
                 >
-                  <ShoppingBag className="w-4 h-4 shrink-0" />
+                  <ShoppingBag className="w-4 h-4 shrink-0 sm:hidden inline" />
                   <span className="hidden sm:inline truncate">Order Now</span>
                 </Link>
                 {/* Add to Cart */}

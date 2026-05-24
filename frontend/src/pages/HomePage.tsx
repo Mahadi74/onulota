@@ -20,6 +20,7 @@ import {
   Zap,
   Package,
   Headphones,
+  ShoppingBag
 } from 'lucide-react'
 
 interface Product {
@@ -96,10 +97,10 @@ const fallbackAds: HomepageSectionItem[] = [
   { _id: 'ad-4', title: 'Best Sellers', subtitle: 'Trending daily', image: 'https://placehold.co/480x300/0f766e/ffffff?text=Best+Sellers' },
 ]
 
-const fallbackDeals = [
-  { label: 'Up to 50% OFF', title: 'Mobile Accessories', description: 'Chargers, cases, earbuds and more', image: 'https://placehold.co/600x400/1e40af/ffffff?text=Accessories', href: '/products' },
-  { label: 'Buy 1 Get 1', title: 'Fashion Essentials', description: 'T-shirts, sandals, bags', image: 'https://placehold.co/600x400/7e22ce/ffffff?text=Fashion', href: '/products' },
-  { label: 'Free Delivery', title: 'Home & Kitchen', description: 'Cookware, furniture, decor', image: 'https://placehold.co/600x400/0c4a6e/ffffff?text=Home', href: '/products' },
+const fallbackDeals: { label: string; title: string; description: string; image: string; href: string; actionText?: string }[] = [
+  { label: 'Up to 50% OFF', title: 'Mobile Accessories', description: 'Chargers, cases, earbuds and more', image: 'https://placehold.co/600x400/1e40af/ffffff?text=Accessories', href: '/products', actionText: 'Shop Now' },
+  { label: 'Buy 1 Get 1', title: 'Fashion Essentials', description: 'T-shirts, sandals, bags', image: 'https://placehold.co/600x400/7e22ce/ffffff?text=Fashion', href: '/products', actionText: 'See Offers' },
+  { label: 'Free Delivery', title: 'Home & Kitchen', description: 'Cookware, furniture, decor', image: 'https://placehold.co/600x400/0c4a6e/ffffff?text=Home', href: '/products', actionText: 'Browse Now' },
 ]
 
 const fallbackPromoBanners: HomepageSectionItem[] = [
@@ -194,7 +195,7 @@ export default function HomePage() {
   const ads = homepageData?.ads?.length ? homepageData.ads : fallbackAds
   const promoBanners = homepageData?.promoBanners?.length ? homepageData.promoBanners : fallbackPromoBanners
   const dealCards = homepageData?.deals?.length
-    ? homepageData.deals.map((d) => ({ label: d.subtitle || 'Limited Offer', title: d.title, description: d.description || '', image: d.image, href: d.actionUrl || '/products' }))
+    ? homepageData.deals.map((d) => ({ label: d.subtitle, title: d.title, description: d.description || '', image: d.image, href: d.actionUrl || '/products', actionText: d.actionText }))
     : fallbackDeals
 
   // Use real categories with images from API; fall back to homepage highlights
@@ -315,32 +316,35 @@ export default function HomePage() {
 
             {/* Left: Hero copy */}
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-bold uppercase tracking-widest text-amber-300">
-                  {decodeHtml(heroBanner?.subtitle) || 'Flash Sale Active'}
-                </span>
-              </div>
+              { heroBanner?.subtitle && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-amber-300">
+                    {decodeHtml(heroBanner?.subtitle)}
+                  </span>
+                </div>
+              )}
               <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold text-white leading-[1.08] tracking-tight">
                 {heroBanner?.title
-                  ? decodeHtml(heroBanner.title).split(/\*(.+?)\*/).map((part, i) =>
+                  && (decodeHtml(heroBanner.title).split(/\*(.+?)\*/).map((part, i) =>
                       i % 2 === 1
                         ? <span key={i} className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">{part}</span>
                         : <span key={i}>{part}</span>
                     )
-                  : <>Bangladesh&apos;s<br /><span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">Premium</span>{' '}Shopping</>
-                }
+                )}
               </h1>
               <p className="text-lg text-slate-300 max-w-lg leading-relaxed">
-                {decodeHtml(heroBanner?.description) || 'Discover daily flash sales, top categories, and curated brand deals — delivered fast across Bangladesh.'}
+                {decodeHtml(heroBanner?.description) || ''}
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
-                <button
-                  onClick={() => navigate(decodeUrl(heroBanner?.actionUrl) || '/products')}
-                  className="inline-flex items-center gap-2 rounded-full bg-blue-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-400 transition-all hover:scale-[1.02] active:scale-100"
-                >
-                  {decodeHtml(heroBanner?.actionText) || 'Start Shopping'} <ArrowRight className="w-4 h-4" />
-                </button>
+                { heroBanner?.actionText && heroBanner?.actionUrl && (
+                  <button
+                    onClick={() => navigate(decodeUrl(heroBanner?.actionUrl) || '/products')}
+                    className="inline-flex items-center gap-2 rounded-full bg-blue-500 px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-400 transition-all hover:scale-[1.02] active:scale-100"
+                  >
+                    {decodeHtml(heroBanner?.actionText) || 'Start Shopping'} <ArrowRight className="w-4 h-4" />
+                  </button>
+                )}
                 <button
                   onClick={() => navigate('/products?sort=discount')}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-sm hover:bg-white/20 transition-all"
@@ -360,7 +364,7 @@ export default function HomePage() {
             </div>
 
             {/* Right: Promo banners */}
-            <div className="space-y-4">
+            <div className="space-y-4 sm:block hidden">
               {promoBanners.slice(0, 2).map((banner) => (
                 <button
                   key={banner._id}
@@ -476,14 +480,18 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
                 </div>
                 <div className="absolute inset-0 flex flex-col justify-end p-6">
-                  <span className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-slate-900">
-                    <Zap className="w-3 h-3" /> {deal.label}
-                  </span>
+                  { deal.label && (
+                    <span className="mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-slate-900">
+                      <Zap className="w-3 h-3" /> {deal.label}
+                    </span>
+                  )}
                   <h3 className="text-xl font-bold text-white">{deal.title}</h3>
                   <p className="mt-1 text-sm text-slate-300/90">{deal.description}</p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 group-hover:gap-3 transition-all">
-                    Shop Now <ArrowRight className="w-4 h-4" />
-                  </div>
+                  { deal?.actionText && (
+                    <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 group-hover:gap-3 transition-all">
+                      {deal?.actionText} <ArrowRight className="w-4 h-4" />
+                    </div>
+                  )}
                 </div>
               </button>
             ))}
@@ -590,7 +598,8 @@ export default function HomePage() {
                         onClick={() => navigate(`/products/${product._id}`)}
                         className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm shadow-blue-200"
                       >
-                        Order Now
+                        <ShoppingBag className="w-4 h-4 shrink-0 sm:hidden inline" />
+                        <span className="hidden sm:inline truncate">Order Now</span>
                       </button>
                       <button
                         onClick={() => handleAddToCart(product)}
@@ -664,8 +673,8 @@ export default function HomePage() {
 
                 {/* Text overlay */}
                 <div className="absolute inset-0 flex flex-col justify-end p-4">
-                  <h3 className="text-sm font-bold text-white leading-tight drop-shadow">{cat.name}</h3>
-                  <div className="mt-1 inline-flex items-center gap-1 text-white/70 text-xs font-medium group-hover:text-white transition-colors">
+                  <h3 className="text-lg font-bold text-white leading-tight drop-shadow">{cat.name}</h3>
+                  <div className="mt-1 inline-flex items-center gap-1 text-white/70 text-md font-medium group-hover:text-white transition-colors">
                     Shop now <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
