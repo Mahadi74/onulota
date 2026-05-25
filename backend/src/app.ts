@@ -3,6 +3,7 @@ import path from 'path'
 import helmet from 'helmet'
 import cors from 'cors'
 import morgan from 'morgan'
+import compression from 'compression'
 import mongoSanitize from 'express-mongo-sanitize'
 import passport from './config/passport'
 import { errorHandler } from './middleware/errorHandler'
@@ -29,6 +30,9 @@ import uploadRoutes from './routes/uploadRoutes'
 
 export function createApp(): express.Application {
   const app = express()
+
+  // Gzip compression — reduces response size by 60-70%
+  app.use(compression())
 
   // Security headers
   app.use(helmet({

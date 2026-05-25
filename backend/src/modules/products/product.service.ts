@@ -257,6 +257,11 @@ export async function getProductDetail(productId: string): Promise<ProductDetail
     throw new Error('Invalid product ID')
   }
 
+  // Serve from Redis cache if available (5-minute TTL)
+  const cacheKey = generateProductDetailCacheKey(productId)
+  const cached = await getCachedData<ProductDetailResponse>(cacheKey)
+  if (cached) return cached
+
   // Fetch product with category information
   const product = await Product.findById(productId)
     .populate('category', '_id name slug')
@@ -271,8 +276,8 @@ export async function getProductDetail(productId: string): Promise<ProductDetail
     throw new Error('Product not found')
   }
 
-  // Return product details with reviews summary
-  return {
+  // Build product details response
+  const result: ProductDetailResponse = {
     _id: product._id,
     name: product.name,
     slug: product.slug,
@@ -299,6 +304,10 @@ export async function getProductDetail(productId: string): Promise<ProductDetail
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   }
+
+  // Cache product detail for 5 minutes
+  await setCachedData(cacheKey, result)
+  return result
 }
 
 /**
@@ -451,22 +460,29 @@ export async function searchProducts(query: ProductSearchQuery): Promise<Product
  * Helper function to find all descendant categories (children, grandchildren, etc.)
  * for a given category ID.
  */
+/**
+ * Replaces the old recursive N+1 query approach with a single MongoDB $graphLookup aggregation.
+ * Old approach: 1 query per category level (could be 10-100+ queries for deep trees).
+ * New approach: 1 query total, regardless of tree depth.
+ */
 async function findCategoryDescendants(categoryId: Types.ObjectId): Promise<Types.ObjectId[]> {
-  const descendants: Types.ObjectId[] = []
+  const result = await Category.aggregate<{ allDescendants: { _id: Types.ObjectId; isActive: boolean }[] }>([
+    { $match: { _id: categoryId } },
+    {
+      $graphLookup: {
+        from: 'categories',
+        startWith: '$_id',
+        connectFromField: '_id',
+        connectToField: 'parent',
+        as: 'allDescendants',
+        restrictSearchWithMatch: { isActive: true },
+      },
+    },
+    { $project: { 'allDescendants._id': 1 } },
+  ])
 
-  const findChildren = async (parentId: Types.ObjectId) => {
-    const children = await Category.find({ parent: parentId, isActive: true })
-      .select('_id')
-      .lean()
-
-    for (const child of children) {
-      descendants.push(child._id)
-      await findChildren(child._id)
-    }
-  }
-
-  await findChildren(categoryId)
-  return descendants
+  if (!result.length) return []
+  return result[0].allDescendants.map((d) => d._id)
 }
 
 /**

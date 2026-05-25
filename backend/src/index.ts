@@ -17,6 +17,10 @@ async function bootstrap(): Promise<void> {
       logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`)
     })
 
+    // Keep connections alive longer than load balancer timeout (prevents dropped connections)
+    server.keepAliveTimeout = 65000
+    server.headersTimeout = 66000
+
     // Graceful shutdown
     const shutdown = async (signal: string) => {
       logger.info(`${signal} received, shutting down gracefully`)

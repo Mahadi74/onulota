@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs/promises'
 import sharp from 'sharp'
 import { User, IUser, IAddress } from '../../models/User'
 import { AppError } from '../../middleware/errorHandler'
@@ -49,7 +49,7 @@ export async function uploadProfileImage(userId: string, imageBuffer: Buffer, mi
   if (!ALLOWED_MIMETYPES.includes(mimetype)) throw new AppError('Invalid image format. Only JPEG, PNG, and WebP are allowed', 400)
   if (imageBuffer.length > MAX_FILE_SIZE) throw new AppError('Image size must not exceed 5MB', 400)
   const uploadsDir = path.join(process.cwd(), 'uploads', 'profiles')
-  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true })
+  await fs.mkdir(uploadsDir, { recursive: true })
   const filename = `${userId}-${Date.now()}.webp`
   const filePath = path.join(uploadsDir, filename)
   const urlPath = `/uploads/profiles/${filename}`

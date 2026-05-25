@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express'
 import { asyncHandler, AppError } from '../../middleware/errorHandler'
 import { HomePromotion, IHomePromotion } from '../../models/HomePromotion'
 import { Types } from 'mongoose'
+import { getCachedData, setCachedData, invalidateCacheKey } from '../../utils/cacheService'
+
+const HOMEPAGE_CACHE_KEY = 'homepage:data'
 
 function formatPromotion(promotion: IHomePromotion) {
   return {
@@ -20,6 +23,13 @@ function formatPromotion(promotion: IHomePromotion) {
 
 export const getHomepageDataHandler = asyncHandler(
   async (_req: Request, res: Response, _next: NextFunction) => {
+    // Serve from Redis cache if available
+    const cached = await getCachedData<typeof grouped>(HOMEPAGE_CACHE_KEY)
+    if (cached) {
+      res.setHeader('X-Cache', 'HIT')
+      return res.json(cached)
+    }
+
     const promotions = await HomePromotion.find({ isActive: true })
       .sort({ section: 1, order: 1 })
       .lean()
@@ -69,6 +79,9 @@ export const getHomepageDataHandler = asyncHandler(
       }
     })
 
+    // Store in Redis for next requests
+    await setCachedData(HOMEPAGE_CACHE_KEY, grouped)
+    res.setHeader('X-Cache', 'MISS')
     res.json(grouped)
   }
 )
@@ -109,6 +122,7 @@ export const createHomepageSectionHandler = asyncHandler(
     })
 
     await promotion.save()
+    await invalidateCacheKey(HOMEPAGE_CACHE_KEY)
 
     res.status(201).json({ promotion: formatPromotion(promotion) })
   }
@@ -152,6 +166,7 @@ export const updateHomepageSectionHandler = asyncHandler(
     if (metadata !== undefined) promotion.metadata = metadata
 
     await promotion.save()
+    await invalidateCacheKey(HOMEPAGE_CACHE_KEY)
 
     res.json({ promotion: formatPromotion(promotion) })
   }
@@ -170,6 +185,7 @@ export const deleteHomepageSectionHandler = asyncHandler(
       throw new AppError('Homepage section not found', 404)
     }
 
+    await invalidateCacheKey(HOMEPAGE_CACHE_KEY)
     res.status(204).end()
   }
 )
