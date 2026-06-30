@@ -103,10 +103,6 @@ const fallbackDeals: { label: string; title: string; description: string; image:
   { label: 'Free Delivery', title: 'Home & Kitchen', description: 'Cookware, furniture, decor', image: 'https://placehold.co/600x400/0c4a6e/ffffff?text=Home', href: '/products', actionText: 'Browse Now' },
 ]
 
-const fallbackPromoBanners: HomepageSectionItem[] = [
-  { _id: 'p1', title: 'Flash Sale — 70% OFF', description: 'Limited time deals on top brands', image: 'https://placehold.co/700x380/1e3a5f/ffffff?text=Flash+Sale', actionText: 'Shop Deals', actionUrl: '/products' },
-  { _id: 'p2', title: 'Daily Essentials', description: 'Everything for home and family', image: 'https://placehold.co/700x380/1e3a5f/ffffff?text=Daily+Essentials', actionText: 'Browse Now', actionUrl: '/products' },
-]
 
 const fallbackFeatures = [
   { icon: Truck, title: 'Fast Delivery', description: 'Delivered across Bangladesh with trusted courier partners.' },
