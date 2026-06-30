@@ -262,7 +262,7 @@ export default function HomePage() {
 
       <SEO
         title="Online Shopping Bangladesh — Best Deals & Fast Delivery"
-        description="Shop the best deals on fashion, electronics, home & more. Free delivery on orders over ৳2,000. Daily flash sales and top brands — Onulota Bangladesh."
+        description="Shop the best deals on fashion, skin care, home & more. Free delivery on orders over ৳2,000. Daily flash sales and top brands — Onulota Bangladesh."
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'WebSite',
@@ -398,7 +398,7 @@ export default function HomePage() {
                   key={item._id}
                   className={`absolute inset-0 transition-opacity duration-700 ${index === activeSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
-                  <img src={item.image} alt={item.title} className="h-full w-full object-contain" loading="lazy" />
+                  <img src={item.image} alt={item.title} className="h-full w-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
                     <p className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2">Limited Time</p>
@@ -472,7 +472,7 @@ export default function HomePage() {
                 className="group relative overflow-hidden rounded-2xl text-left shadow-sm hover:shadow-xl transition-all hover:-translate-y-1"
               >
                 <div className="relative h-52 overflow-hidden">
-                  <img src={deal.image} alt={deal.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <img src={deal.image} alt={deal.title} className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
                 </div>
                 <div className="absolute inset-0 flex flex-col justify-end p-6">
