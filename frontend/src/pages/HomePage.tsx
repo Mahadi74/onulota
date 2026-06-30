@@ -193,7 +193,7 @@ export default function HomePage() {
   /* ── Resolved data ── */
   const carouselItems = homepageData?.carouselItems?.length ? homepageData.carouselItems : fallbackCarousel
   const ads = homepageData?.ads?.length ? homepageData.ads : fallbackAds
-  const promoBanners = homepageData?.promoBanners?.length ? homepageData.promoBanners : fallbackPromoBanners
+  const promoBanners = homepageData?.promoBanners?.length ? homepageData.promoBanners : []
   const dealCards = homepageData?.deals?.length
     ? homepageData.deals.map((d) => ({ label: d.subtitle, title: d.title, description: d.description || '', image: d.image, href: d.actionUrl || '/products', actionText: d.actionText }))
     : fallbackDeals
